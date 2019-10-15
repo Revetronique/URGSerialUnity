@@ -20,22 +20,47 @@ public class LRFClick : MonoBehaviour
     Rect scanRange = new Rect();
 
     /// <summary>
+    /// Visualizing the captured data from LRF
+    /// </summary>
+    [SerializeField]
+    LineRenderer visual;
+
+    /// <summary>
     /// callee event when the device detects something
     /// </summary>
     [SerializeField]
     ScanScreenPointEvent onScanScreenPoint;
-    
+
     Matrix4x4 quadwarp = new Matrix4x4();
 
     // Start is called before the first frame update
     void Start()
     {
-        var topLeft = new Vector2(scanRange.xMin, scanRange.yMin);
-        var bottomLeft = new Vector2(scanRange.xMin, scanRange.yMax);
-        var bottomRight = new Vector2(scanRange.xMax, scanRange.yMax);
-        var topRight = new Vector2(scanRange.xMax, scanRange.yMin);
+        var topLeft = new Vector2(scanRange.xMin, scanRange.yMax);
+        var bottomLeft = new Vector2(scanRange.xMin, scanRange.yMin);
+        var bottomRight = new Vector2(scanRange.xMax, scanRange.yMin);
+        var topRight = new Vector2(scanRange.xMax, scanRange.yMax);
         
         quadwarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
+    }
+
+    void Update()
+    {
+        var points = GetScanPoint();
+
+        visual.positionCount = points.Count;
+        for (int i = 0; i < points.Count; i++)
+        {
+            var screen = new Vector3(points[i].x, points[i].y, -Camera.main.transform.position.z);
+            var world = Camera.main.ScreenToWorldPoint(screen);
+            visual.SetPosition(i, world);
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawLine(new Vector2(scanRange.xMin, scanRange.yMin), new Vector2(scanRange.xMin, scanRange.yMax));
     }
 
     /// <summary>
@@ -68,17 +93,14 @@ public class LRFClick : MonoBehaviour
     /// Calculate scanned points in orthogonal coordination system
     /// </summary>
     /// <returns>List of detecting points (mm)</returns>
-    public List<Vector2> GetScanPosition()
+    public List<Vector2> GetScanPoint()
     {
         var points = new List<Vector2>();
 
         foreach (var scan in urg.ScanPoints)
         {
-            // calculate scanned points in orthogonal coordination system
-            var x = scan.Value * Mathf.Sin(scan.Key / 180 * Mathf.PI);
-            var y = scan.Value * Mathf.Cos(scan.Key / 180 * Mathf.PI);
             // add results in the list
-            points.Add(new Vector2(x, y));
+            points.Add(polarToOrth(scan.Key, scan.Value));
         }
 
         return points;
@@ -125,4 +147,14 @@ public class LRFClick : MonoBehaviour
         return mtx;
     }
 
+    Vector2 polarToOrth(float angle, long distance)
+    {
+        // convert the angle as radian
+        var rad = angle / 180.0f * Mathf.PI;
+        // convert points in polar coordination to orthogonal
+        var x = distance * Mathf.Cos(rad);
+        var y = distance * Mathf.Sin(rad);
+
+        return new Vector2(x, y);
+    }
 }

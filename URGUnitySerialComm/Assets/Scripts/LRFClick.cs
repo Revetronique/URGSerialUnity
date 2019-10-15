@@ -20,16 +20,15 @@ public class LRFClick : MonoBehaviour
     Rect scanRange = new Rect();
 
     /// <summary>
-    /// Visualizing the captured data from LRF
-    /// </summary>
-    [SerializeField]
-    LineRenderer visual;
-
-    /// <summary>
     /// callee event when the device detects something
     /// </summary>
     [SerializeField]
     ScanScreenPointEvent onScanScreenPoint;
+
+    /// <summary>
+    /// Rectangle scanning range
+    /// </summary>
+    public Rect ScanRange { get { return scanRange; } }
 
     Matrix4x4 quadwarp = new Matrix4x4();
 
@@ -44,25 +43,6 @@ public class LRFClick : MonoBehaviour
         quadwarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
     }
 
-    void Update()
-    {
-        var points = GetScanPoint();
-
-        visual.positionCount = points.Count;
-        for (int i = 0; i < points.Count; i++)
-        {
-            var screen = new Vector3(points[i].x, points[i].y, -Camera.main.transform.position.z);
-            var world = Camera.main.ScreenToWorldPoint(screen);
-            visual.SetPosition(i, world);
-        }
-    }
-
-    void OnDrawGizmos()
-    {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawLine(new Vector2(scanRange.xMin, scanRange.yMin), new Vector2(scanRange.xMin, scanRange.yMax));
-    }
-
     /// <summary>
     /// Get screen points calculated from scanned points with LRF 
     /// </summary>
@@ -74,13 +54,12 @@ public class LRFClick : MonoBehaviour
         foreach (var scan in urg.ScanPoints)
         {
             //convert coordination system from polar to orthogonal
-            var x = scan.Value * Mathf.Sin(scan.Key / 180 * Mathf.PI);
-            var y = scan.Value * Mathf.Cos(scan.Key / 180 * Mathf.PI);
+            var pos = polarToOrth(scan.Key + 90, scan.Value);
             //only if the point in the range
-            if (x >= scanRange.xMin && x <= scanRange.xMax && y >= scanRange.yMin && y <= scanRange.yMax)
+            if (pos.x >= scanRange.xMin && pos.x <= scanRange.xMax && pos.y >= scanRange.yMin && pos.y <= scanRange.yMax)
             {
                 //convert scanned point as screen position
-                var quad = quadwarp * new Vector4(x, scanRange.yMax - y, 1, 0);
+                var quad = quadwarp * new Vector4(pos.x, scanRange.yMax - pos.y, 1, 0);
                 var point = new Vector2(quad.x * Screen.width, quad.y * Screen.height);
                 scanning.Add(point);
             }
@@ -90,7 +69,8 @@ public class LRFClick : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculate scanned points in orthogonal coordination system
+    /// <para>Calculate scanned points in orthogonal coordination system</para>
+    /// <para>x-axis as horizontal, y-axis as vertical</para>
     /// </summary>
     /// <returns>List of detecting points (mm)</returns>
     public List<Vector2> GetScanPoint()
@@ -100,7 +80,8 @@ public class LRFClick : MonoBehaviour
         foreach (var scan in urg.ScanPoints)
         {
             // add results in the list
-            points.Add(polarToOrth(scan.Key, scan.Value));
+            // turn left to adjust the point at 90 degree as the center
+            points.Add(polarToOrth(scan.Key + 90, scan.Value));
         }
 
         return points;
@@ -147,6 +128,12 @@ public class LRFClick : MonoBehaviour
         return mtx;
     }
 
+    /// <summary>
+    /// convert points in polar coordination to orthogonal
+    /// </summary>
+    /// <param name="angle">degree angle</param>
+    /// <param name="distance">radius from origin</param>
+    /// <returns></returns>
     Vector2 polarToOrth(float angle, long distance)
     {
         // convert the angle as radian

@@ -14,19 +14,32 @@ public class LRFVisual : MonoBehaviour
         METER,
         CENTIMETER,
         MILLIMETER,
-        INCH
+        INCH,
+    }
+
+    public enum Coordination
+    {
+        WORLD,
+        SCREEN,
     }
 
     /// <summary>
     /// scan data of LRF
     /// </summary>
-    [SerializeField]
+    [SerializeField, Tooltip("Analyzing scanned data and converting to screen points")]
     LRFClick lrf;
 
     /// <summary>
     /// Unit of the parameter to visualize
     /// </summary>
+    [Tooltip("unit of scanned points with LRF")]
     public ScaleUnit unit = ScaleUnit.MILLIMETER;
+
+    /// <summary>
+    /// Space coordinator
+    /// </summary>
+    [Tooltip("coordination space to visualize")]
+    public Coordination space = Coordination.WORLD;
 
     /// <summary>
     /// Visualizing the captured data from LRF
@@ -68,11 +81,15 @@ public class LRFVisual : MonoBehaviour
         // visualize detecting range in Unity Editor
         // set the drawing color as red
         Gizmos.color = Color.red;
+
         // calculate the edge points of detecting range with considering the device posture
-        var p1 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMin, 0, lrf.ScanRange.yMin) * scaling;
-        var p2 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMin, 0, lrf.ScanRange.yMax) * scaling;
-        var p3 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMax, 0, lrf.ScanRange.yMax) * scaling;
-        var p4 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMax, 0, lrf.ScanRange.yMin) * scaling;
+        Vector3 p1, p2, p3, p4;
+        //calculate points as world space
+        p1 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMin, 0, lrf.ScanRange.yMin) * scaling;
+        p2 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMin, 0, lrf.ScanRange.yMax) * scaling;
+        p3 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMax, 0, lrf.ScanRange.yMax) * scaling;
+        p4 = transform.position + transform.rotation * new Vector3(lrf.ScanRange.xMax, 0, lrf.ScanRange.yMin) * scaling;
+        
         // draw the detecting range with 4 lines
         Gizmos.DrawLine(p1, p2);
         Gizmos.DrawLine(p2, p3);
@@ -91,8 +108,20 @@ public class LRFVisual : MonoBehaviour
         //draw scanning result
         for (int i = 0; i < points.Count; i++)
         {
-            var scan = new Vector3(points[i].x, 0, points[i].y) * scaling;
-            visual.SetPosition(i, scan);
+            Vector3 point;
+            //calculate points to visualize scanned data with LRF
+            //screen space
+            if (space == Coordination.SCREEN)
+            {
+                var quad = lrf.QuadWarp * new Vector4(points[i].x, points[i].y, 1, 0);
+                point = transform.rotation * (Camera.main.ScreenToWorldPoint(new Vector3(quad.x * Screen.width, quad.y * Screen.height, -Camera.main.transform.position.z)) - transform.position);
+            }
+            //world space
+            else
+            {
+                point = new Vector3(points[i].x, 0, points[i].y) * scaling;
+            }
+            visual.SetPosition(i, point);
         }
     }
 }

@@ -120,6 +120,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &169229063 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+    type: 3}
+  m_PrefabInstance: {fileID: 660846683}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61f52de3096e8264dae990113e11a635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &609496285
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +161,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &609496287
 MonoBehaviour:
@@ -166,7 +178,106 @@ MonoBehaviour:
   prefab: {fileID: 1353750034685860036, guid: 02d0138dd2b5a4146b3587255ea6975f, type: 3}
   interval: 0.03
   lifespan: 1
-  lrf: {fileID: 1995172036}
+  lrf: {fileID: 169229063}
+--- !u!1001 &660846683
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7308245121743928153, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_Name
+      value: URG-04LX-UG01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743927460, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: onScanScreenPoint.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: onScanScreenPoint.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: onScanScreenPoint.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: onScanScreenPoint.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 609496287}
+    - target: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: onScanScreenPoint.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Generate
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308245121743928154, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: onScanScreenPoint.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 397514e4bda438a4d94e02ebe1043992, type: 3}
 --- !u!1 &1783283326
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,8 +404,8 @@ Camera:
   m_GameObject: {fileID: 1842785349}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -335,94 +446,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842785349}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1995172034
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1995172035}
-  - component: {fileID: 1995172038}
-  - component: {fileID: 1995172036}
-  m_Layer: 0
-  m_Name: URG-04LX-UG01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1995172035
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995172034}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1995172036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995172034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61f52de3096e8264dae990113e11a635, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  urg: {fileID: 1995172038}
-  scanRange:
-    serializedVersion: 2
-    x: -160
-    y: 0
-    width: 320
-    height: 200
-  onScanScreenPoint:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 609496287}
-        m_MethodName: Generate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: LRFClick+ScanScreenPointEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
---- !u!114 &1995172038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995172034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56d5a98e00bccb340a86ff280693a9d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: COM13
-  bps: 19200
-  rangeStep: {x: 150, y: 640}
-  isShortRange: 0
-  group: 30
-  skip: 0

@@ -10,37 +10,34 @@ public class LRFClick : MonoBehaviour
     /// <summary>
     /// containing scanned values from Laser Range Finder
     /// </summary>
-    [SerializeField]
+    [SerializeField, Tooltip("LRF class instance to acquire scanned data")]
     URGSerial urg;
 
     /// <summary>
     /// physical size of scanned area with LRF
     /// </summary>
-    [SerializeField]
+    [SerializeField, Tooltip("Physical size and origin (Bottom Right) of scanned area (mm)")]
     Rect scanRange = new Rect();
-
-    /// <summary>
-    /// callee event when the device detects something
-    /// </summary>
-    [SerializeField]
-    ScanScreenPointEvent onScanScreenPoint;
 
     /// <summary>
     /// Rectangle scanning range
     /// </summary>
     public Rect ScanRange { get { return scanRange; } }
 
-    Matrix4x4 quadwarp = new Matrix4x4();
+    /// <summary>
+    /// Conversion matrix for homography transformation
+    /// </summary>
+    public Matrix4x4 QuadWarp { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        var topLeft = new Vector2(scanRange.xMin, scanRange.yMax);
-        var bottomLeft = new Vector2(scanRange.xMin, scanRange.yMin);
-        var bottomRight = new Vector2(scanRange.xMax, scanRange.yMin);
-        var topRight = new Vector2(scanRange.xMax, scanRange.yMax);
+        var topLeft = new Vector2(scanRange.xMax, scanRange.yMax);
+        var bottomLeft = new Vector2(scanRange.xMax, scanRange.yMin);
+        var bottomRight = new Vector2(scanRange.xMin, scanRange.yMin);
+        var topRight = new Vector2(scanRange.xMin, scanRange.yMax);
         
-        quadwarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
+        QuadWarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
     }
 
     /// <summary>
@@ -59,7 +56,7 @@ public class LRFClick : MonoBehaviour
             if (pos.x >= scanRange.xMin && pos.x <= scanRange.xMax && pos.y >= scanRange.yMin && pos.y <= scanRange.yMax)
             {
                 //convert scanned point as screen position
-                var quad = quadwarp * new Vector4(pos.x, scanRange.yMax - pos.y, 1, 0);
+                var quad = QuadWarp * new Vector4(pos.x, pos.y, 1, 0);
                 var point = new Vector2(quad.x * Screen.width, quad.y * Screen.height);
                 scanning.Add(point);
             }

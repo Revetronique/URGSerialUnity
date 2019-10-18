@@ -54,7 +54,7 @@ public class URGSerial : MonoBehaviour
 
     protected Dictionary<float, long> points = new Dictionary<float, long>();
     /// <summary>
-    /// Distance at each angle (mm)
+    /// Distance at each angle (degree, mm)
     /// </summary>
     public Dictionary<float, long> ScanPoints { get { return points; } }
 
@@ -156,6 +156,15 @@ public class URGSerial : MonoBehaviour
                 Debug.LogErrorFormat("[IO Error]: {0}, {1}", ex.Source, ex.Message);
             }
         }
+    }
+
+    /// <summary>
+    /// Select COM port for serial communication
+    /// </summary>
+    /// <param name="portName">port to connect</param>
+    public void ChangePort(string portName)
+    {
+        port = portName;
     }
 
     public bool Open()

@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d5a98e00bccb340a86ff280693a9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: COM13
+  port: COM3
   bps: 19200
   rangeStep: {x: 160, y: 600}
   isShortRange: 0
@@ -142,17 +142,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   urg: {fileID: 7308245121743928155}
-  scanRange:
+  ScanRange:
     serializedVersion: 2
     x: -160
-    y: 50
+    y: 0
     width: 320
     height: 200
-  onScanScreenPoint:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: LRFClick+ScanScreenPointEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!1 &7308245122933730216
 GameObject:
   m_ObjectHideFlags: 0

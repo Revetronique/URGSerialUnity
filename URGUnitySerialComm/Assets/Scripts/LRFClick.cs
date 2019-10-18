@@ -16,13 +16,8 @@ public class LRFClick : MonoBehaviour
     /// <summary>
     /// physical size of scanned area with LRF
     /// </summary>
-    [SerializeField, Tooltip("Physical size and origin (Bottom Right) of scanned area (mm)")]
-    Rect scanRange = new Rect();
-
-    /// <summary>
-    /// Rectangle scanning range
-    /// </summary>
-    public Rect ScanRange { get { return scanRange; } }
+    [Tooltip("Physical size and origin (Bottom Right) of scanned area (mm)")]
+    public Rect ScanRange = new Rect();
 
     /// <summary>
     /// Conversion matrix for homography transformation
@@ -32,12 +27,7 @@ public class LRFClick : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var topLeft = new Vector2(scanRange.xMax, scanRange.yMax);
-        var bottomLeft = new Vector2(scanRange.xMax, scanRange.yMin);
-        var bottomRight = new Vector2(scanRange.xMin, scanRange.yMin);
-        var topRight = new Vector2(scanRange.xMin, scanRange.yMax);
-        
-        QuadWarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
+        RemapQuadWarp();
     }
 
     /// <summary>
@@ -53,7 +43,7 @@ public class LRFClick : MonoBehaviour
             //convert coordination system from polar to orthogonal
             var pos = polarToOrth(scan.Key + 90, scan.Value);
             //only if the point in the range
-            if (pos.x >= scanRange.xMin && pos.x <= scanRange.xMax && pos.y >= scanRange.yMin && pos.y <= scanRange.yMax)
+            if (pos.x >= ScanRange.xMin && pos.x <= ScanRange.xMax && pos.y >= ScanRange.yMin && pos.y <= ScanRange.yMax)
             {
                 //convert scanned point as screen position
                 var quad = QuadWarp * new Vector4(pos.x, pos.y, 1, 0);
@@ -82,6 +72,19 @@ public class LRFClick : MonoBehaviour
         }
 
         return points;
+    }
+
+    /// <summary>
+    /// Remapping conversion matrix for homography transformation
+    /// </summary>
+    public void RemapQuadWarp()
+    {
+        var topLeft = new Vector2(ScanRange.xMax, ScanRange.yMax);
+        var bottomLeft = new Vector2(ScanRange.xMax, ScanRange.yMin);
+        var bottomRight = new Vector2(ScanRange.xMin, ScanRange.yMin);
+        var topRight = new Vector2(ScanRange.xMin, ScanRange.yMax);
+
+        QuadWarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
     }
 
     /// <summary>

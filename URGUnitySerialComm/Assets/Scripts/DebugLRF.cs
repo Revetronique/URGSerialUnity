@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.IO.Ports;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +12,10 @@ public class DebugLRF : MonoBehaviour
     LRFClick click;
 
     [SerializeField]
-    Dropdown portList;
+    LRFVisual visual;
 
-    InputField input;
+    [SerializeField]
+    Dropdown portList;
 
     // Start is called before the first frame update
     void Start()
@@ -49,9 +48,22 @@ public class DebugLRF : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Set up the coordinate system of visualization
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="num">index (0:world, 1:screen)</param>
+    public void ChangeVisualCoord(int num)
+    {
+        var values = System.Enum.GetValues(typeof(LRFVisual.Coordination));
+        if (num < values.Length)
+        {
+            visual.Space = (LRFVisual.Coordination)values.GetValue(num);
+        }
+    }
+
+    /// <summary>
+    /// Set the right point of scanning range
+    /// </summary>
+    /// <param name="str">right(mm)</param>
     public void AdjustScanX(string str)
     {
         float value;
@@ -61,6 +73,10 @@ public class DebugLRF : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the top point of scanning range
+    /// </summary>
+    /// <param name="str">top(mm)</param>
     public void AdjustScanY(string str)
     {
         float value;
@@ -70,6 +86,10 @@ public class DebugLRF : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the width of scanning range
+    /// </summary>
+    /// <param name="str">width(mm)</param>
     public void AdjustScanWidth(string str)
     {
         float value;
@@ -79,6 +99,10 @@ public class DebugLRF : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the height of scanning range
+    /// </summary>
+    /// <param name="str">height(mm)</param>
     public void AdjustScanHeight(string str)
     {
         float value;

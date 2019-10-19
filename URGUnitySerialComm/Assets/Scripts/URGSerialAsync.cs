@@ -29,6 +29,9 @@ public class URGSerialAsync : URGSerial
     }
 
     #region Asynchronous
+    /// <summary>
+    /// Start asynchronous scanning process
+    /// </summary>
     public async void StartScanAsync()
     {
         StartScan();
@@ -56,12 +59,18 @@ public class URGSerialAsync : URGSerial
         }); //.ConfigureAwait(false)
     }
 
+    /// <summary>
+    /// Stop asynchronous scanning process
+    /// </summary>
     public async void StopScanAsync()
     {
         tokenSource.Cancel();
         await Task.Delay(100).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Show the acquired data from asynchronous process
+    /// </summary>
     public async void ShowDistanceLogAsync()
     {
         //var message = await serialPort.ReadLineAsync("ascii");
@@ -73,6 +82,10 @@ public class URGSerialAsync : URGSerial
         }
     }
 
+    /// <summary>
+    /// Read data via Serial communication asynchronously
+    /// </summary>
+    /// <returns>Result of the asyncronous process</returns>
     async Task<Dictionary<float, long>> processReadDistanceAsync()
     {
         var packets = await serialPort.ReadLineAsync();

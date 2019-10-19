@@ -33,13 +33,13 @@ public class LRFVisual : MonoBehaviour
     /// Unit of the parameter to visualize
     /// </summary>
     [Tooltip("unit of scanned points with LRF")]
-    public ScaleUnit unit = ScaleUnit.MILLIMETER;
+    public ScaleUnit Unit = ScaleUnit.MILLIMETER;
 
     /// <summary>
     /// Space coordinator
     /// </summary>
     [Tooltip("coordination space to visualize")]
-    public Coordination space = Coordination.WORLD;
+    public Coordination Space = Coordination.WORLD;
 
     /// <summary>
     /// Visualizing the captured data from LRF
@@ -53,7 +53,7 @@ public class LRFVisual : MonoBehaviour
     {
         get
         {
-            switch (unit)
+            switch (Unit)
             {
                 case ScaleUnit.METER:
                     return 1;
@@ -111,7 +111,7 @@ public class LRFVisual : MonoBehaviour
             Vector3 point;
             //calculate points to visualize scanned data with LRF
             //screen space
-            if (space == Coordination.SCREEN)
+            if (Space == Coordination.SCREEN)
             {
                 var quad = lrf.QuadWarp * new Vector4(points[i].x, points[i].y, 1, 0);
                 point = transform.rotation * (Camera.main.ScreenToWorldPoint(new Vector3(quad.x * Screen.width, quad.y * Screen.height, -Camera.main.transform.position.z)) - transform.position);

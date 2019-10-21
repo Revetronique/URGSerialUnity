@@ -154,7 +154,7 @@ namespace URG
         /// <param name="start">start step of the scaning point</param>
         /// <param name="end">end step of the scaning point</param>
         /// <param name="grouping">step interval</param>
-        /// <returns>distance</returns>
+        /// <returns>distance at each angle (center as 0 deg.)</returns>
         public static Dictionary<float, long> getPointDistance(List<string> lines, int size, int start, int end, int group)
         {
             //measured distance at each angle

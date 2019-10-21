@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Effect : MonoBehaviour
@@ -41,10 +42,15 @@ public class Effect : MonoBehaviour
     {
         if (Time.time - previous > interval)
         {
-            var points = lrf.GetScanScreenPoint();
-
-            foreach (var point in points)
+            // get the scanned points converted to orthogonal coordinate at all angles
+            var scans = lrf.GetScanScreenPoint(false);
+            // get chunks of satisfied elements
+            var groups = grouping(scans, v => v != Vector2.zero);
+            // get the average point in each chunk
+            foreach (var group in groups)
             {
+                var point = new Vector2(group.Average(v => v.x), group.Average(v => v.y));
+
                 var screen = new Vector3(point.x, point.y, -Camera.main.transform.position.z);
                 var world = Camera.main.ScreenToWorldPoint(screen);
 
@@ -52,7 +58,34 @@ public class Effect : MonoBehaviour
                 Destroy(obj, lifespan);
             }
 
+            //----- get all scanned points within the range -----
+            //var points = lrf.GetScanScreenPoint();
+
+            //foreach (var point in points)
+            //{
+            //    var screen = new Vector3(point.x, point.y, -Camera.main.transform.position.z);
+            //    var world = Camera.main.ScreenToWorldPoint(screen);
+
+            //    var obj = Instantiate(prefab, world, prefab.transform.rotation);
+            //    Destroy(obj, lifespan);
+            //}
+            //---------------------------------------------------
+
             previous = Time.time;
+        }
+    }
+
+    IEnumerable<IEnumerable<T>> grouping<T>(IEnumerable<T> source, System.Func<T, bool> predicate)
+    {
+        while (source.Any(predicate))
+        {
+            // find the first element satisfying the predicate
+            var first = source.First(predicate);
+            // get the group of the leading elements which satisfies the predicate
+            source = source.SkipWhile(x => !x.Equals(first));
+            yield return source.TakeWhile(predicate);
+            // cutting chunk from the source elements
+            source = source.SkipWhile(predicate);
         }
     }
 

@@ -10,54 +10,50 @@ public class LRFClick : MonoBehaviour
     /// <summary>
     /// containing scanned values from Laser Range Finder
     /// </summary>
-    [SerializeField]
+    [SerializeField, Tooltip("LRF class instance to acquire scanned data")]
     URGSerial urg;
 
     /// <summary>
     /// physical size of scanned area with LRF
     /// </summary>
-    [SerializeField]
-    Rect scanRange = new Rect();
+    [Tooltip("Physical size and origin (Bottom Right) of scanned area (mm)")]
+    public Rect ScanRange = new Rect();
 
     /// <summary>
-    /// callee event when the device detects something
+    /// Conversion matrix for homography transformation
     /// </summary>
-    [SerializeField]
-    ScanScreenPointEvent onScanScreenPoint;
-    
-    Matrix4x4 quadwarp = new Matrix4x4();
+    public Matrix4x4 QuadWarp { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        var topLeft = new Vector2(scanRange.xMin, scanRange.yMin);
-        var bottomLeft = new Vector2(scanRange.xMin, scanRange.yMax);
-        var bottomRight = new Vector2(scanRange.xMax, scanRange.yMax);
-        var topRight = new Vector2(scanRange.xMax, scanRange.yMin);
-        
-        quadwarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
+        RemapQuadWarp();
     }
 
     /// <summary>
     /// Get screen points calculated from scanned points with LRF 
     /// </summary>
     /// <returns>list of screen position (x, y)</returns>
-    public List<Vector2> GetScanScreenPoint()
+    public List<Vector2> GetScanScreenPoint(bool culling = true)
     {
         var scanning = new List<Vector2>();
 
         foreach (var scan in urg.ScanPoints)
         {
             //convert coordination system from polar to orthogonal
-            var x = scan.Value * Mathf.Sin(scan.Key / 180 * Mathf.PI);
-            var y = scan.Value * Mathf.Cos(scan.Key / 180 * Mathf.PI);
+            var pos = polarToOrth(scan.Key + 90, scan.Value);
             //only if the point in the range
-            if (x >= scanRange.xMin && x <= scanRange.xMax && y >= scanRange.yMin && y <= scanRange.yMax)
+            if (pos.x >= ScanRange.xMin && pos.x <= ScanRange.xMax && pos.y >= ScanRange.yMin && pos.y <= ScanRange.yMax)
             {
                 //convert scanned point as screen position
-                var quad = quadwarp * new Vector4(x, scanRange.yMax - y, 1, 0);
+                var quad = QuadWarp * new Vector4(pos.x, pos.y, 1, 0);
                 var point = new Vector2(quad.x * Screen.width, quad.y * Screen.height);
                 scanning.Add(point);
+            }
+            //add zero vector if culling is disabled
+            else if (!culling)
+            {
+                scanning.Add(Vector2.zero);
             }
         }
 
@@ -65,23 +61,35 @@ public class LRFClick : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculate scanned points in orthogonal coordination system
+    /// <para>Calculate scanned points in orthogonal coordination system</para>
+    /// <para>x-axis as horizontal, y-axis as vertical</para>
     /// </summary>
     /// <returns>List of detecting points (mm)</returns>
-    public List<Vector2> GetScanPosition()
+    public List<Vector2> GetScanPoint()
     {
         var points = new List<Vector2>();
 
         foreach (var scan in urg.ScanPoints)
         {
-            // calculate scanned points in orthogonal coordination system
-            var x = scan.Value * Mathf.Sin(scan.Key / 180 * Mathf.PI);
-            var y = scan.Value * Mathf.Cos(scan.Key / 180 * Mathf.PI);
             // add results in the list
-            points.Add(new Vector2(x, y));
+            // turn left to adjust the point at 90 degree as the center
+            points.Add(polarToOrth(scan.Key + 90, scan.Value));
         }
 
         return points;
+    }
+
+    /// <summary>
+    /// Remapping conversion matrix for homography transformation
+    /// </summary>
+    public void RemapQuadWarp()
+    {
+        var topLeft = new Vector2(ScanRange.xMax, ScanRange.yMax);
+        var bottomLeft = new Vector2(ScanRange.xMax, ScanRange.yMin);
+        var bottomRight = new Vector2(ScanRange.xMin, ScanRange.yMin);
+        var topRight = new Vector2(ScanRange.xMin, ScanRange.yMax);
+
+        QuadWarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
     }
 
     /// <summary>
@@ -125,4 +133,20 @@ public class LRFClick : MonoBehaviour
         return mtx;
     }
 
+    /// <summary>
+    /// convert points in polar coordination to orthogonal
+    /// </summary>
+    /// <param name="angle">degree angle</param>
+    /// <param name="distance">radius from origin</param>
+    /// <returns></returns>
+    Vector2 polarToOrth(float angle, long distance)
+    {
+        // convert the angle as radian
+        var rad = angle / 180.0f * Mathf.PI;
+        // convert points in polar coordination to orthogonal
+        var x = distance * Mathf.Cos(rad);
+        var y = distance * Mathf.Sin(rad);
+
+        return new Vector2(x, y);
+    }
 }

@@ -6,6 +6,9 @@ using URG;
 
 public class URGSerial : MonoBehaviour
 {
+    /// <summary>
+    /// list of available baud rate
+    /// </summary>
     public enum BAUDRATE
     {
         Default_19k2 = 19200,
@@ -54,7 +57,7 @@ public class URGSerial : MonoBehaviour
 
     protected Dictionary<float, long> points = new Dictionary<float, long>();
     /// <summary>
-    /// Distance at each angle (mm)
+    /// Distance at each angle (degree, mm)
     /// </summary>
     public Dictionary<float, long> ScanPoints { get { return points; } }
 
@@ -112,6 +115,9 @@ public class URGSerial : MonoBehaviour
         Close();
     }
     
+    /// <summary>
+    /// Start scanning with LRF
+    /// </summary>
     public void StartScan()
     {
         if (serialPort != null && serialPort.IsOpen)
@@ -135,6 +141,9 @@ public class URGSerial : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stop scanning with LRF
+    /// </summary>
     public void StopScan()
     {
         if (serialPort == null)
@@ -158,6 +167,19 @@ public class URGSerial : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Select COM port for serial communication
+    /// </summary>
+    /// <param name="portName">port to connect</param>
+    public void ChangePort(string portName)
+    {
+        port = portName;
+    }
+
+    /// <summary>
+    /// Open and Connect Serial port
+    /// </summary>
+    /// <returns>connection success or not</returns>
     public bool Open()
     {
         if (serialPort == null)
@@ -181,6 +203,9 @@ public class URGSerial : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Close connection of Serial port
+    /// </summary>
     public void Close()
     {
         if (serialPort == null)

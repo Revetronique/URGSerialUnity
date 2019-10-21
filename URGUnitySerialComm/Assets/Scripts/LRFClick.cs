@@ -34,7 +34,7 @@ public class LRFClick : MonoBehaviour
     /// Get screen points calculated from scanned points with LRF 
     /// </summary>
     /// <returns>list of screen position (x, y)</returns>
-    public List<Vector2> GetScanScreenPoint()
+    public List<Vector2> GetScanScreenPoint(bool culling = true)
     {
         var scanning = new List<Vector2>();
 
@@ -49,6 +49,11 @@ public class LRFClick : MonoBehaviour
                 var quad = QuadWarp * new Vector4(pos.x, pos.y, 1, 0);
                 var point = new Vector2(quad.x * Screen.width, quad.y * Screen.height);
                 scanning.Add(point);
+            }
+            //add zero vector if culling is disabled
+            else if (!culling)
+            {
+                scanning.Add(Vector2.zero);
             }
         }
 

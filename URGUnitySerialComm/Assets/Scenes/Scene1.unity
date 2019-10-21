@@ -2215,6 +2215,11 @@ PrefabInstance:
       propertyPath: port
       value: COM13
       objectReference: {fileID: 0}
+    - target: {fileID: 7308245122933730230, guid: 397514e4bda438a4d94e02ebe1043992,
+        type: 3}
+      propertyPath: Space
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 397514e4bda438a4d94e02ebe1043992, type: 3}
 --- !u!114 &660846684 stripped

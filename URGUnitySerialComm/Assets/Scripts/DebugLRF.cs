@@ -111,4 +111,19 @@ public class DebugLRF : MonoBehaviour
             click.ScanRange.height = value;
         }
     }
+
+    public void FlipLRFHorizontal(bool flip)
+    {
+        click.FlipHorizontal = flip;
+    }
+
+    public void FlipLRFVertical(bool flip)
+    {
+        click.FlipVertical = flip;
+    }
+
+    public void RemapQuad()
+    {
+        click.RemapQuadWarp();
+    }
 }

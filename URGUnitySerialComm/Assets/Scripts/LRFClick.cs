@@ -19,6 +19,12 @@ public class LRFClick : MonoBehaviour
     [Tooltip("Physical size and origin (Bottom Right) of scanned area (mm)")]
     public Rect ScanRange = new Rect();
 
+    [Tooltip("Flipping horizontal value of scanned points right to left")]
+    public bool FlipHorizontal = false;
+
+    [Tooltip("Flipping vertical value of scanned points bottom to top")]
+    public bool FlipVertical = false;
+
     /// <summary>
     /// Conversion matrix for homography transformation
     /// </summary>
@@ -84,10 +90,20 @@ public class LRFClick : MonoBehaviour
     /// </summary>
     public void RemapQuadWarp()
     {
-        var topLeft = new Vector2(ScanRange.xMax, ScanRange.yMax);
-        var bottomLeft = new Vector2(ScanRange.xMax, ScanRange.yMin);
-        var bottomRight = new Vector2(ScanRange.xMin, ScanRange.yMin);
-        var topRight = new Vector2(ScanRange.xMin, ScanRange.yMax);
+        //var topLeft = new Vector2(ScanRange.xMax, ScanRange.yMax);
+        //var bottomLeft = new Vector2(ScanRange.xMax, ScanRange.yMin);
+        //var bottomRight = new Vector2(ScanRange.xMin, ScanRange.yMin);
+        //var topRight = new Vector2(ScanRange.xMin, ScanRange.yMax);
+
+        var left = FlipHorizontal ? ScanRange.xMax : ScanRange.xMin;
+        var right = FlipHorizontal ? ScanRange.xMin : ScanRange.xMax;
+        var top = FlipVertical ? ScanRange.yMax : ScanRange.yMin;
+        var bottom = FlipVertical ? ScanRange.yMin : ScanRange.yMax;
+
+        var topLeft = new Vector2(left, top);
+        var bottomLeft = new Vector2(left, bottom);
+        var bottomRight = new Vector2(right, bottom);
+        var topRight = new Vector2(right, top);
 
         QuadWarp = calcHomography(topLeft, bottomLeft, bottomRight, topRight).inverse;
     }
